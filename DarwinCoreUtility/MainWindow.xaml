@@ -1,0 +1,34 @@
+﻿<Window x:Class="DarwinCoreUtility.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DarwinCoreUtility"
+        xmlns:pages="clr-namespace:DarwinCoreUtility.Pages"
+        mc:Ignorable="d"
+        Title="WunderVision - Darwin Core Utility" Height="450" Width="800" Name="mainWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Load" Click="OpenLoadDialog"/>
+            <MenuItem Header="Export KML"/>
+        </Menu>
+        <ListView Grid.Row="1" Width="200" ItemsSource="{Binding NavigationOptions, ElementName=mainWindow}" SelectionChanged="ListView_SelectionChanged" Name="navigationList">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding ButtonName}" Tag="{Binding ButtonTag}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ContentControl Grid.Row="1" Grid.Column="1" Margin="10" Name="controlWindow"/>
+
+
+    </Grid>
+</Window>
