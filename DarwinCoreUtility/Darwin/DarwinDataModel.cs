@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 using DarwinCoreUtility.CSV;
+using DarwinCoreUtility.KML;
 
 namespace DarwinCoreUtility.Darwin
 {
@@ -54,8 +51,6 @@ namespace DarwinCoreUtility.Darwin
         }
 
 
-
-
         public DarwinDataModel(){}
         public DarwinDataModel(CSVFile file)
         {
@@ -71,6 +66,26 @@ namespace DarwinCoreUtility.Darwin
             {
                 data.Add(new DarwinData(row));
             }
+            NotifyPropertyChanged("Data");
+        }
+
+        public void ExportKML(string filename)
+        {
+            KMLFile outputFile = new KMLFile();
+            var document = new Document();
+            document.Placemarks = new List<Placemark>();
+            foreach (var datarow in Data)
+            {
+                document.Placemarks.Add(new Placemark()
+                {
+                    Name = datarow.Genus,
+                    Description = datarow.Locality,
+                    Point = new PlacemarkPoint(datarow.DecimalLatitude, datarow.DecimalLongitude)
+                });
+            }
+            outputFile.Document = document;
+            KMLFile.Save(outputFile, filename);
+            
         }
 
 

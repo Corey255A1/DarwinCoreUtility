@@ -7,32 +7,78 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using DarwinCoreUtility.CSV;
-using System.Linq;
+
 namespace DarwinCoreUtility.Darwin
 {
-    public class DarwinData: INotifyPropertyChanged
+    [System.AttributeUsage(AttributeTargets.Property)]
+    public class DarwinField : System.Attribute
+    {
+        public string ColumnHeader;
+        public DarwinField(string columnHeader) { ColumnHeader = columnHeader; }
+    }
+
+    public class DarwinData : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         public DarwinData(CSVRow rowofdata)
         {
-            foreach(FieldInfo fieldInfo in typeof(DarwinData).GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (PropertyInfo propertyInfo in PropertyMap.Values)
             {
-                if (fieldInfo.Name == nameof(PropertyChanged)) continue;
-                fieldInfo.SetValue(this, rowofdata[fieldInfo.Name]);
+                propertyInfo.SetValue(this, rowofdata[PropertyToColumnHeader[propertyInfo.Name]]);
             }
+        }
+
+        private static Dictionary<string, string> propertyToColumnHeader = null;
+        public static Dictionary<string, string> PropertyToColumnHeader
+        {
+            get
+            {
+                if (propertyToColumnHeader == null)
+                {
+                    propertyToColumnHeader = new Dictionary<string, string>();
+                    foreach (PropertyInfo propertyInfo in PropertyMap.Values)
+                    {
+                        var name = (propertyInfo.GetCustomAttribute(typeof(DarwinField)) as DarwinField).ColumnHeader;
+                        propertyToColumnHeader.Add(propertyInfo.Name, name);
+                    }
+                }
+                return propertyToColumnHeader;
+            }
+        }
+
+
+        private static Dictionary<string, PropertyInfo> propertyMap = null;
+        public static Dictionary<string, PropertyInfo> PropertyMap
+        {
+            get
+            {
+                if (propertyMap == null)
+                {
+                    propertyMap = new Dictionary<string, PropertyInfo>();
+                    foreach (var prop in typeof(DarwinData).GetProperties().Where(p=>Attribute.IsDefined(p,typeof(DarwinField))))
+                    {
+                        propertyMap.Add(prop.Name, prop);
+                    }
+                }
+                return propertyMap;
+            }
+        }
+        
+
+        public string this[string key]{
+            get => PropertyMap.ContainsKey(key) ? (string)PropertyMap[key].GetValue(this) : null;
         }
 
         public static IEnumerable<string> PublicProperties
         {
-            get {
-              foreach(var prop in typeof(DarwinData).GetProperties(BindingFlags.Public | BindingFlags.Instance)) { yield return prop.Name; }
-            }
+            get => PropertyMap.Keys;
         }
 
 
         private string catalogNumber;
+        [DarwinField("catalogNumber")]
         public string CatalogNumber
         {
             get => catalogNumber;
@@ -43,6 +89,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string individualCount;
+        [DarwinField("individualCount")]
         public string IndividualCount
         {
             get => individualCount;
@@ -53,6 +100,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string sex;
+        [DarwinField("sex")]
         public string Sex
         {
             get => sex;
@@ -63,6 +111,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string lifeStage;
+        [DarwinField("lifeStage")]
         public string LifeStage
         {
             get => lifeStage;
@@ -73,6 +122,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string recordNumber;
+        [DarwinField("recordNumber")]
         public string RecordNumber
         {
             get => recordNumber;
@@ -83,6 +133,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string recordedBy;
+        [DarwinField("recordedBy")]
         public string RecordedBy
         {
             get => recordedBy;
@@ -93,6 +144,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string eventDate;
+        [DarwinField("eventDate")]
         public string EventDate
         {
             get => eventDate;
@@ -103,6 +155,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string habitat;
+        [DarwinField("habitat")]
         public string Habitat
         {
             get => habitat;
@@ -113,6 +166,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string locality;
+        [DarwinField("locality")]
         public string Locality
         {
             get => locality;
@@ -123,6 +177,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string county;
+        [DarwinField("county")]
         public string County
         {
             get => county;
@@ -133,6 +188,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string stateProvince;
+        [DarwinField("stateProvince")]
         public string StateProvince
         {
             get => stateProvince;
@@ -143,6 +199,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string country;
+        [DarwinField("country")]
         public string Country
         {
             get => country;
@@ -153,6 +210,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string minimumElevationInMeters;
+        [DarwinField("minimumElevationInMeters")]
         public string MinimumElevationInMeters
         {
             get => minimumElevationInMeters;
@@ -163,6 +221,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string decimalLatitude;
+        [DarwinField("decimalLatitude")]
         public string DecimalLatitude
         {
             get => decimalLatitude;
@@ -173,6 +232,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string decimalLongitude;
+        [DarwinField("decimalLongitude")]
         public string DecimalLongitude
         {
             get => decimalLongitude;
@@ -183,6 +243,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string coordinateUncertaintyInMeters;
+        [DarwinField("coordinateUncertaintyInMeters")]
         public string CoordinateUncertaintyInMeters
         {
             get => coordinateUncertaintyInMeters;
@@ -193,6 +254,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string genus;
+        [DarwinField("genus")]
         public string Genus
         {
             get => genus;
@@ -203,6 +265,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string specificEpithet;
+        [DarwinField("specificEpithet")]
         public string SpecificEpithet
         {
             get => specificEpithet;
@@ -213,6 +276,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string subspecies;
+        [DarwinField("subspecies")]
         public string Subspecies
         {
             get => subspecies;
@@ -223,6 +287,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string family;
+        [DarwinField("family")]
         public string Family
         {
             get => family;
@@ -233,6 +298,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string order;
+        [DarwinField("order")]
         public string Order
         {
             get => order;
@@ -243,6 +309,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string preparations;
+        [DarwinField("preparations")]
         public string Preparations
         {
             get => preparations;
@@ -253,6 +320,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string institutionCode;
+        [DarwinField("institutionCode")]
         public string InstitutionCode
         {
             get => institutionCode;
@@ -263,6 +331,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string collectionCode;
+        [DarwinField("collectionCode")]
         public string CollectionCode
         {
             get => collectionCode;
@@ -273,6 +342,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string id;
+        [DarwinField("id")]
         public string Id
         {
             get => id;
@@ -283,6 +353,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string identifiedBy;
+        [DarwinField("identifiedBy")]
         public string IdentifiedBy
         {
             get => identifiedBy;
@@ -293,6 +364,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string dateIdentified;
+        [DarwinField("dateIdentified")]
         public string DateIdentified
         {
             get => dateIdentified;
@@ -303,6 +375,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string occurrenceRemarks;
+        [DarwinField("occurrenceRemarks")]
         public string OccurrenceRemarks
         {
             get => occurrenceRemarks;
@@ -313,6 +386,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string ownerInstitutionCode;
+        [DarwinField("ownerInstitutionCode")]
         public string OwnerInstitutionCode
         {
             get => ownerInstitutionCode;
@@ -323,6 +397,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string recordEnteredBy;
+        [DarwinField("recordEnteredBy")]
         public string RecordEnteredBy
         {
             get => recordEnteredBy;
@@ -333,6 +408,7 @@ namespace DarwinCoreUtility.Darwin
             }
         }
         private string references;
+        [DarwinField("references")]
         public string References
         {
             get => references;

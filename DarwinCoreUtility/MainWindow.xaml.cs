@@ -53,5 +53,15 @@ namespace DarwinCoreUtility
                 navigationList.SelectedItem = NavigationOptions[0];
             }
         }
+
+        private void ExportKML(object sender, RoutedEventArgs e)
+        {
+            var sfd = new SaveFileDialog();
+            sfd.Filter = "KML Files (*.kml)|*.kml";
+            if (DarwinDataModel.CurrentData != null && sfd.ShowDialog() == true)
+            {
+                DarwinDataModel.CurrentData.ExportKML(sfd.FileName);
+            }
+        }
     }
 }

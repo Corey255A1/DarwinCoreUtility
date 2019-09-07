@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\XmlUtils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -68,6 +69,7 @@
     <Compile Include="Darwin\DarwinData.cs" />
     <Compile Include="Darwin\DarwinDataModel.cs" />
     <Compile Include="KML\KMLFile.cs" />
+    <Compile Include="KML\KMLFileSettings.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
