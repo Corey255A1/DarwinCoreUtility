@@ -28,10 +28,10 @@ namespace DarwinCoreUtility.Pages
         public string ButtonTag => "kmlsettings";
 
 
-        private ICollectionView filterHeaderView;
-        private bool HeaderFilter(object filterObj)
+        private CollectionViewSource groupFilterView;
+        private void GroupFilter(object filterObj, FilterEventArgs e)
         {
-            return !currentSettings.FolderGrouping.Contains(filterObj as String);
+            e.Accepted = !currentSettings.FolderGrouping.Contains(e.Item as String);
         }
 
         private KMLFileSettings currentSettings { get => KMLFileSettings.CurrentSettings; }
@@ -42,9 +42,10 @@ namespace DarwinCoreUtility.Pages
             this.DataContext = currentSettings;
             
             InitializeComponent();
-            filterHeaderView = CollectionViewSource.GetDefaultView(headerCombo.ItemsSource);
-            filterHeaderView.Filter = HeaderFilter;
+            groupFilterView = ((CollectionViewSource)this.Resources["GroupFilter"]);
+            groupFilterView.Filter += GroupFilter;
         }
+
         private void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
             currentSettings.Save();
@@ -54,7 +55,7 @@ namespace DarwinCoreUtility.Pages
             if(headerCombo.SelectedItem != null)
             {
                 currentSettings.AddGrouping(headerCombo.SelectedItem as String);
-                filterHeaderView.Refresh();
+                groupFilterView.View.Refresh();
             }
         }
 
@@ -62,7 +63,7 @@ namespace DarwinCoreUtility.Pages
         {
             var btn = sender as Button;
             currentSettings.RemoveGrouping(btn.DataContext as String);
-            filterHeaderView.Refresh();
+            groupFilterView.View.Refresh();
         }
 
         private void MoveGroupingUp_Click(object sender, RoutedEventArgs e)
@@ -77,6 +78,15 @@ namespace DarwinCoreUtility.Pages
             var btn = sender as Button;
             var item = btn.DataContext as String;
             currentSettings.MoveGrouping(item, 1);
+        }
+
+
+        private void InsertName_Click(object sender, RoutedEventArgs e)
+        {
+            if(placemarkNameCombo.SelectedItem != null)
+            {
+                currentSettings.PlacemarkNameFormat += $"[[{placemarkNameCombo.SelectedItem as String}]]";
+            }
         }
     }
 }

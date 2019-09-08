@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
+using System.Text;
 using DarwinCoreUtility.CSV;
 using DarwinCoreUtility.KML;
 
@@ -77,9 +77,11 @@ namespace DarwinCoreUtility.Darwin
         {
             KMLFile outputFile = new KMLFile();
             var document = new Document();
-
             document.Folders = new List<Folder>();
-            foreach(Folder f in FolderStructure)
+            GenerateFolderStructure(KMLFileSettings.CurrentSettings.FolderGrouping.ToArray());
+
+
+            foreach (Folder f in FolderStructure)
             {
                 document.Folders.Add(f);
             }
@@ -92,7 +94,24 @@ namespace DarwinCoreUtility.Darwin
 
         private static Placemark GeneratePlacemark(DarwinData d)
         {
-            return new Placemark() { Name = d.Genus, Point=new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude) };
+            string fieldDef = KMLFileSettings.CurrentSettings.PlacemarkNameFormat;
+            StringBuilder nameFormatted = new StringBuilder(fieldDef);
+            int openBracket = -1;
+            int closeBracket = 0;
+            while ((openBracket = fieldDef.IndexOf("[[", closeBracket)) != -1)
+            {
+                closeBracket = fieldDef.IndexOf("]]", openBracket);
+                string field = fieldDef.Substring(openBracket+2, closeBracket - openBracket-2);
+                string resolved = d[field];
+                //if (String.IsNullOrEmpty(resolved))
+                //{
+                //    resolved = "[Not Specified]";
+                //}
+                nameFormatted.Replace($"[[{field}]]", resolved);
+            }
+            return new Placemark() {
+                Name = nameFormatted.ToString(), Point=new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude)
+            };
         }
 
         public void GenerateFolderStructure(string[] propertyNames)

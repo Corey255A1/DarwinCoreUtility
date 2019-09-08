@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DarwinCoreUtility"
         xmlns:pages="clr-namespace:DarwinCoreUtility.Pages"
         mc:Ignorable="d"
-        Title="WunderVision - Darwin Core Utility" Height="450" Width="800" Name="mainWindow">
+        Title="WunderVision - Darwin Core Utility" Name="mainWindow" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -27,7 +27,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ContentControl Grid.Row="1" Grid.Column="1" Margin="10" Name="controlWindow"/>
+        <ContentControl Grid.Row="1" Grid.Column="1" Margin="5" Name="controlWindow"/>
 
 
     </Grid>

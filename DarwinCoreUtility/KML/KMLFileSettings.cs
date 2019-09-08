@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -10,7 +12,7 @@ using DarwinCoreUtility.Utils;
 namespace DarwinCoreUtility.KML
 {
     [XmlRoot("KMLSettings")]
-    public class KMLFileSettings
+    public class KMLFileSettings: INotifyPropertyChanged
     {
         private static KMLFileSettings currentSettings = null;
         public static KMLFileSettings CurrentSettings
@@ -35,6 +37,17 @@ namespace DarwinCoreUtility.KML
 
         [XmlIgnore]
         public ObservableCollection<Folder> FolderStructure { get => DarwinDataModel.CurrentData.FolderStructure; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        private string placemarkNameFormat = "";
+        public string PlacemarkNameFormat
+        {
+            get { return placemarkNameFormat; }
+            set { placemarkNameFormat = value; NotifyPropertyChanged(); }
+        }
+
 
         public KMLFileSettings()
         {

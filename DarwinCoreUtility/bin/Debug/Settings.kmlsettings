@@ -4,4 +4,5 @@
     <FolderGrouping>Genus</FolderGrouping>
     <FolderGrouping>SpecificEpithet</FolderGrouping>
   </FolderGroupings>
+  <PlacemarkNameFormat>[[Genus]] [[SpecificEpithet]] [[Subspecies]]</PlacemarkNameFormat>
 </KMLSettings>
