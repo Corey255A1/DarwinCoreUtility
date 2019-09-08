@@ -19,17 +19,22 @@ namespace DarwinCoreUtility.KML
             {
                 if (currentSettings == null)
                 {
-                    currentSettings = XmlUtils.Load<KMLFileSettings>("Settings.kmlsettings");//= new KMLFileSettings();
+                    currentSettings = XmlUtils.Load<KMLFileSettings>("Settings.kmlsettings");
+                    if (currentSettings == null)
+                    {
+                        currentSettings = new KMLFileSettings();
+                    }
                 }
                 return currentSettings;
             }
         }
 
-        [XmlIgnore]
-        public ObservableCollection<Folder> FolderStructure { get; set; } = new ObservableCollection<Folder>();
 
         [XmlArray("FolderGroupings"), XmlArrayItem("FolderGrouping")]
         public ObservableCollection<string> FolderGrouping { get; set; } = new ObservableCollection<string>();
+
+        [XmlIgnore]
+        public ObservableCollection<Folder> FolderStructure { get => DarwinDataModel.CurrentData.FolderStructure; }
 
         public KMLFileSettings()
         {
@@ -41,7 +46,7 @@ namespace DarwinCoreUtility.KML
             var loadedSettings = XmlUtils.Load<KMLFileSettings>("Settings.kmlsettings");
             FolderGrouping.Clear();
             foreach (string grouping in loadedSettings.FolderGrouping) { FolderGrouping.Add(grouping); }
-            GenerateFolderStructure();
+            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
 
         public void Save()
@@ -52,13 +57,13 @@ namespace DarwinCoreUtility.KML
 
         public void AddGrouping(string name)
         {
-            currentSettings.FolderGrouping.Add(name);            
-            currentSettings.GenerateFolderStructure();
+            currentSettings.FolderGrouping.Add(name);
+            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
         public void RemoveGrouping(string name)
         {
             currentSettings.FolderGrouping.Remove(name);
-            currentSettings.GenerateFolderStructure();
+            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
 
         public bool MoveGrouping(string name, int direction)
@@ -67,6 +72,8 @@ namespace DarwinCoreUtility.KML
             if (idx + direction >= 0 && idx + direction < currentSettings.FolderGrouping.Count)
             {
                 currentSettings.FolderGrouping.Move(idx, idx + direction);
+                DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+                return true;
             }
             return false;
         }
@@ -75,37 +82,13 @@ namespace DarwinCoreUtility.KML
         {
             if (e.PropertyName == "Data")
             {
-                GenerateFolderStructure();
+                DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
             }            
         }
 
-        private void GenerateFolderStructure(IEnumerable<DarwinData> enumerations, string[] propertyNames, int propertyNameIndex, Folder parentFolder)
-        {
-            if (propertyNames.Length <= 0 || enumerations.Count() == 0) return;
+        
 
-            var grouping = enumerations.GroupBy(datum => datum[propertyNames[propertyNameIndex]]);
-            foreach (var g in grouping)
-            {
-                //Console.WriteLine(new string('\t',propertyNameIndex) + g.Key);
-                var f = new Folder() { Name = string.IsNullOrEmpty(g.Key) ? "[Not Specified]" : g.Key };
-                if (propertyNameIndex + 1 < propertyNames.Length)
-                {
-                    f.Folders = new List<Folder>();
-                    GenerateFolderStructure(g, propertyNames, propertyNameIndex + 1, f);
-                }
-                parentFolder.Folders.Add(f);
-            }
-            parentFolder.Folders.Sort((a, b) => { return String.Compare(a.Name, b.Name); });
-        }
 
-        private void GenerateFolderStructure()
-        {
-            FolderStructure.Clear();
-            var f = new Folder() { Name = "root" };
-            f.Folders = new List<Folder>();
-            GenerateFolderStructure(DarwinDataModel.CurrentData.Data, FolderGrouping.ToArray(), 0, f);
-            f.Folders.ForEach(add => FolderStructure.Add(add));
-        }
 
 
 

@@ -69,20 +69,14 @@ namespace DarwinCoreUtility.Pages
         {
             var btn = sender as Button;
             var item = btn.DataContext as String;
-            if (currentSettings.MoveGrouping(item, 1))
-            {
-                filterHeaderView.Refresh();
-            }
+            currentSettings.MoveGrouping(item, -1);
         }
 
         private void MoveGroupingDown_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var item = btn.DataContext as String;
-            if (currentSettings.MoveGrouping(item, -1))
-            {
-                filterHeaderView.Refresh();
-            }
+            currentSettings.MoveGrouping(item, 1);
         }
     }
 }

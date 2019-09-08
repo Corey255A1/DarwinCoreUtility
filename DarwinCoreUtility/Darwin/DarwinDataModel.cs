@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using DarwinCoreUtility.CSV;
@@ -45,6 +47,8 @@ namespace DarwinCoreUtility.Darwin
             }
         }
 
+        public ObservableCollection<Folder> FolderStructure { get; set; } = new ObservableCollection<Folder>();
+
         public IEnumerable<string> Headers
         {
             get => DarwinData.PublicProperties;
@@ -73,19 +77,59 @@ namespace DarwinCoreUtility.Darwin
         {
             KMLFile outputFile = new KMLFile();
             var document = new Document();
-            document.Placemarks = new List<Placemark>();
-            foreach (var datarow in Data)
+
+            document.Folders = new List<Folder>();
+            foreach(Folder f in FolderStructure)
             {
-                document.Placemarks.Add(new Placemark()
-                {
-                    Name = datarow.Genus,
-                    Description = datarow.Locality,
-                    Point = new PlacemarkPoint(datarow.DecimalLatitude, datarow.DecimalLongitude)
-                });
+                document.Folders.Add(f);
             }
+
             outputFile.Document = document;
             KMLFile.Save(outputFile, filename);
             
+        }
+
+
+        private static Placemark GeneratePlacemark(DarwinData d)
+        {
+            return new Placemark() { Name = d.Genus, Point=new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude) };
+        }
+
+        public void GenerateFolderStructure(string[] propertyNames)
+        {
+            FolderStructure.Clear();
+            var f = new Folder() { Name = "root" };
+            f.Folders = new List<Folder>();
+            DarwinDataModel.GenerateFolderStructure(Data, propertyNames, 0, f);
+            f.Folders.ForEach(add => FolderStructure.Add(add));
+        }
+
+
+        private static void GenerateFolderStructure(IEnumerable<DarwinData> enumerations, string[] propertyNames, int propertyNameIndex, Folder parentFolder)
+        {
+            if (propertyNames.Length <= 0 || enumerations.Count() == 0) return;
+
+            var grouping = enumerations.GroupBy(datum => datum[propertyNames[propertyNameIndex]]);
+            foreach (var g in grouping)
+            {
+                //Console.WriteLine(new string('\t',propertyNameIndex) + g.Key);
+                var f = new Folder() { Name = string.IsNullOrEmpty(g.Key) ? "[Not Specified]" : g.Key };
+                if (propertyNameIndex + 1 < propertyNames.Length)
+                {
+                    f.Folders = new List<Folder>();
+                    GenerateFolderStructure(g, propertyNames, propertyNameIndex + 1, f);
+                }
+                else
+                {
+                    f.Placemarks = new List<Placemark>();
+                    foreach (var d in g)
+                    {
+                        f.Placemarks.Add(GeneratePlacemark(d));
+                    }
+                }
+                parentFolder.Folders.Add(f);
+            }
+            parentFolder.Folders.Sort((a, b) => { return String.Compare(a.Name, b.Name); });
         }
 
 

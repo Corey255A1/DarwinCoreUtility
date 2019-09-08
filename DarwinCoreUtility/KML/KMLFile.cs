@@ -42,7 +42,7 @@ namespace DarwinCoreUtility.KML
     }
     public class Folder
     {
-        [XmlAttribute("name")]
+        [XmlElement("name")]
         public string Name { get; set; }
 
         [XmlElement("Folder")]
