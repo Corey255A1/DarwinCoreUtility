@@ -12,7 +12,7 @@ using DarwinCoreUtility.Utils;
 namespace DarwinCoreUtility.KML
 {
     [XmlRoot("KMLSettings")]
-    public class KMLFileSettings: INotifyPropertyChanged
+    public class KMLFileSettings : INotifyPropertyChanged
     {
         private static KMLFileSettings currentSettings = null;
         public static KMLFileSettings CurrentSettings
@@ -47,6 +47,16 @@ namespace DarwinCoreUtility.KML
             get { return placemarkNameFormat; }
             set { placemarkNameFormat = value; NotifyPropertyChanged(); }
         }
+
+        private readonly string placemarkDescriptionWrapperFormat = "<![CDATA[<div class=\"googft-info-window\">{0}</div>]]>";
+        private readonly string placemarkDescriptionHTMLPreviewFormat = "<html><body>{0}</body></html>";
+        private string placemarkDescriptionFormat = "";
+        public string PlacemarkDescriptionFormat
+        {
+            get { return placemarkDescriptionFormat; }
+            set { placemarkDescriptionFormat = value; NotifyPropertyChanged(); }
+        }
+
 
 
         public KMLFileSettings()

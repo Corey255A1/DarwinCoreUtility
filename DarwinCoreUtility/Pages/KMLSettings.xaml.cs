@@ -44,6 +44,7 @@ namespace DarwinCoreUtility.Pages
             InitializeComponent();
             groupFilterView = ((CollectionViewSource)this.Resources["GroupFilter"]);
             groupFilterView.Filter += GroupFilter;
+            webster.NavigateToString("<html><body><strong>THIS IS A TEST</strong></body></html>");
         }
 
         private void SaveSettings_Click(object sender, RoutedEventArgs e)
@@ -86,6 +87,32 @@ namespace DarwinCoreUtility.Pages
             if(placemarkNameCombo.SelectedItem != null)
             {
                 currentSettings.PlacemarkNameFormat += $"[[{placemarkNameCombo.SelectedItem as String}]]";
+            }
+        }
+    }
+
+    public class WebBrowserDynamicUpdate
+    {
+
+        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HtmlProperty =
+            DependencyProperty.RegisterAttached("Html", typeof(string), typeof(WebBrowserDynamicUpdate), new PropertyMetadata(HtmlChanged));
+
+        public static string GetHtml(DependencyObject dependencyObject)
+        {
+            return (string)dependencyObject.GetValue(HtmlProperty);
+        }
+
+        public static void SetHtml(DependencyObject dependencyObject, string body)
+        {
+            dependencyObject.SetValue(HtmlProperty, body);
+        }
+        private static void HtmlChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var wb = d as WebBrowser;
+            if(wb != null && !String.IsNullOrEmpty(e.NewValue as string))
+            {
+                wb.NavigateToString(e.NewValue as string);
             }
         }
     }

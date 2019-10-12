@@ -5,4 +5,26 @@
     <FolderGrouping>SpecificEpithet</FolderGrouping>
   </FolderGroupings>
   <PlacemarkNameFormat>[[Genus]] [[SpecificEpithet]] [[Subspecies]]</PlacemarkNameFormat>
+  <PlacemarkDescriptionFormat>&lt;table border=1 style="width:500px"&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Species&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Oenomaea pulchella Xystodesmidae&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Catalog Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;MPE04829&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Individual Count&lt;/b&gt;&lt;/td&gt;&lt;td&gt;1&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Sex&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Male&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Life Stage&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Adult&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Record Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;DAH-2019-0427-01&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collected By&lt;/b&gt;&lt;/td&gt;&lt;td&gt;D. A. Hennen&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Date Collected&lt;/b&gt;&lt;/td&gt;&lt;td&gt;27-Apr-19&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Habitat&lt;/b&gt;&lt;/td&gt;&lt;td&gt;"Rhododendron, oak, hemlock, beech forest along stream. 9:20 - 11:45 AM."&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Locality&lt;/b&gt;&lt;/td&gt;&lt;td&gt;"Great Smoky Mountains National Park, Gatlinburg Trail off US 441 past Sugarlands Visitor Center"&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;County&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Sevier&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;State/Province&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Tennessee&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Country&lt;/b&gt;&lt;/td&gt;&lt;td&gt;USA&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Elevation&lt;/b&gt;&lt;/td&gt;&lt;td&gt;384&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Uncertainty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Family&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Polydesmida&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Order&lt;/b&gt;&lt;/td&gt;&lt;td&gt;"whole animal, 100% ethanol"&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Preparations&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Institution Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collection Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;may have been killed by nematodes&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</PlacemarkDescriptionFormat>
 </KMLSettings>
