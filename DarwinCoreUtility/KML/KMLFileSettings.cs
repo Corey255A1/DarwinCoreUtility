@@ -107,14 +107,7 @@ namespace DarwinCoreUtility.KML
             {
                 DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
             }            
-        }
-
-        
-
-
-
-
-
+        }    
 
     }
 }

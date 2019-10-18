@@ -37,11 +37,13 @@ namespace DarwinCoreUtility.Pages
         private KMLFileSettings currentSettings { get => KMLFileSettings.CurrentSettings; }
         public DarwinDataModel Data { get=>DarwinDataModel.CurrentData; }
 
+        public TextBox lastFocused = null;
+
         public KMLSettings()
         {
-            this.DataContext = currentSettings;
-            
             InitializeComponent();
+            this.DataContext = currentSettings;           
+            
             groupFilterView = ((CollectionViewSource)this.Resources["GroupFilter"]);
             groupFilterView.Filter += GroupFilter;
             webster.NavigateToString("<html><body><strong>THIS IS A TEST</strong></body></html>");
@@ -86,8 +88,23 @@ namespace DarwinCoreUtility.Pages
         {
             if(placemarkNameCombo.SelectedItem != null)
             {
-                currentSettings.PlacemarkNameFormat += $"[[{placemarkNameCombo.SelectedItem as String}]]";
+                if(lastFocused != null)
+                {
+                    if (!String.IsNullOrEmpty(lastFocused.SelectedText))
+                    {
+                        lastFocused.SelectedText = $"[[{placemarkNameCombo.SelectedItem as String}]]";
+                    }
+                    else
+                    {
+                        lastFocused.Text = lastFocused.Text.Insert(lastFocused.CaretIndex, $"[[{placemarkNameCombo.SelectedItem as String}]]");
+                    }
+                }
             }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            lastFocused = sender as TextBox;
         }
     }
 

@@ -80,7 +80,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.ColumnSpan="3" Style="{StaticResource Header}" Text="Folder Grouping"/>
                     <Grid Grid.Row="1">
@@ -148,14 +148,14 @@
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition MaxWidth="300"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="225"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Name:" Style="{StaticResource FieldLabel}"/>
-                            <TextBox Text="{Binding PlacemarkNameFormat}"  Grid.Column="1"/>                            
+                            <TextBox Text="{Binding PlacemarkNameFormat}"  Grid.Column="1" GotFocus="TextBox_GotFocus"/>                            
                             <Button Width="60" Grid.Column="2" Content="Insert" Click="InsertName_Click"/>
-                            <ComboBox Width="225" Grid.Column="3" ItemsSource="{Binding Data.Headers, ElementName=kmlSettings}" Name="placemarkNameCombo"/>
+                            <ComboBox Grid.Column="3" ItemsSource="{Binding Data.Headers, ElementName=kmlSettings}" Name="placemarkNameCombo"/>
                         </Grid>
                         <Grid Grid.Row="1" Height="50">
                             <Grid.RowDefinitions>
@@ -178,7 +178,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Text ="{Binding PlacemarkDescriptionFormat}" Grid.Column="0" AcceptsReturn="True"/>
+                            <TextBox x:Name="htmlEdit" Text ="{Binding PlacemarkDescriptionFormat}" Grid.Column="0" AcceptsReturn="True" GotFocus="TextBox_GotFocus"/>
                             <WebBrowser local:WebBrowserDynamicUpdate.Html ="{Binding PlacemarkDescriptionFormat}"  Name="webster"  Grid.Column="1"/>
                         </Grid>
                     </Grid>
