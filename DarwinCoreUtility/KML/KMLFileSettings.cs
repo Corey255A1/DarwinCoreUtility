@@ -14,14 +14,24 @@ namespace DarwinCoreUtility.KML
     [XmlRoot("KMLSettings")]
     public class KMLFileSettings : INotifyPropertyChanged
     {
+        public static readonly string DefaultSettings = "Settings.dcsettings";
+        private static string LastSettingsFile = DefaultSettings;
+        public delegate void SettingsLoaded(KMLFileSettings newsettings);
+        public static SettingsLoaded KMLSettingsLoaded;
+
         private static KMLFileSettings currentSettings = null;
         public static KMLFileSettings CurrentSettings
         {
+            set
+            {
+                currentSettings = value;
+                KMLSettingsLoaded?.Invoke(currentSettings);
+            }
             get
             {
                 if (currentSettings == null)
                 {
-                    currentSettings = XmlUtils.Load<KMLFileSettings>("Settings.kmlsettings");
+                    currentSettings = XmlUtils.Load<KMLFileSettings>(DefaultSettings);
                     if (currentSettings == null)
                     {
                         currentSettings = new KMLFileSettings();
@@ -30,7 +40,6 @@ namespace DarwinCoreUtility.KML
                 return currentSettings;
             }
         }
-
 
         [XmlArray("FolderGroupings"), XmlArrayItem("FolderGrouping")]
         public ObservableCollection<string> FolderGrouping { get; set; } = new ObservableCollection<string>();
@@ -45,36 +54,74 @@ namespace DarwinCoreUtility.KML
         public string PlacemarkNameFormat
         {
             get { return placemarkNameFormat; }
-            set { placemarkNameFormat = value; NotifyPropertyChanged(); }
+            set { placemarkNameFormat = value; NotifyPropertyChanged(); NotifyPropertyChanged(nameof(PlacemarkNameFormatPreview)); }
         }
 
-        private readonly string placemarkDescriptionWrapperFormat = "<![CDATA[<div class=\"googft-info-window\">{0}</div>]]>";
-        private readonly string placemarkDescriptionHTMLPreviewFormat = "<html><body>{0}</body></html>";
+        [XmlIgnore]
+        public string PlacemarkNameFormatPreview
+        {
+            get {
+
+                if (DarwinDataModel.CurrentData.Data.Count > 0)
+                {
+                    return DarwinDataModel.CurrentData.ResolveFields(placemarkNameFormat, 0);
+                }
+                else
+                {
+                    return placemarkNameFormat;
+                }
+            }
+        }
+
+        public static readonly string PlacemarkDescriptionWrapperFormat = "<div class=\"googft-info-window\">{0}</div>";// May or may not need this <![CDATA[ ]]>
+
         private string placemarkDescriptionFormat = "";
         public string PlacemarkDescriptionFormat
         {
-            get { return placemarkDescriptionFormat; }
-            set { placemarkDescriptionFormat = value; NotifyPropertyChanged(); }
+            get => placemarkDescriptionFormat;
+            set { placemarkDescriptionFormat = value; NotifyPropertyChanged(); NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview)); }
         }
 
+        [XmlIgnore]
+        public string PlacemarkDescriptionFormatPreview
+        {
+            get {
 
+                if (DarwinDataModel.CurrentData.Data.Count > 0) {
+                 return DarwinDataModel.CurrentData.ResolveFields(placemarkDescriptionFormat, 0);
+                }
+                else
+                {
+                    return PlacemarkDescriptionFormat;
+                }
+            }
+        }
 
         public KMLFileSettings()
         {
             DarwinDataModel.CurrentData.PropertyChanged += CurrentData_PropertyChanged;
         }
 
-        public void Load()
+        public static void Load(string path = "")
         {
-            var loadedSettings = XmlUtils.Load<KMLFileSettings>("Settings.kmlsettings");
-            FolderGrouping.Clear();
-            foreach (string grouping in loadedSettings.FolderGrouping) { FolderGrouping.Add(grouping); }
-            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+            if (!String.IsNullOrEmpty(path))
+            {
+                LastSettingsFile = path;
+            }
+            CurrentSettings = XmlUtils.Load<KMLFileSettings>(LastSettingsFile);
+            //FolderGrouping.Clear();
+            //foreach (string grouping in loadedSettings.FolderGrouping) { FolderGrouping.Add(grouping); }
+            //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
 
-        public void Save()
+        public static void Save(string path="")
         {
-            XmlUtils.Save(this, "Settings.kmlsettings");
+            if (!String.IsNullOrEmpty(path))
+            {
+                LastSettingsFile = path;                
+            }
+ 
+            XmlUtils.Save(CurrentSettings, LastSettingsFile);
         }
 
 
@@ -106,6 +153,8 @@ namespace DarwinCoreUtility.KML
             if (e.PropertyName == "Data")
             {
                 DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+                NotifyPropertyChanged(nameof(PlacemarkNameFormatPreview));
+                NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
             }            
         }    
 

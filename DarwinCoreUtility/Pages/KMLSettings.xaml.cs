@@ -42,16 +42,42 @@ namespace DarwinCoreUtility.Pages
         public KMLSettings()
         {
             InitializeComponent();
-            this.DataContext = currentSettings;           
+            this.DataContext = currentSettings;
+            KMLFileSettings.KMLSettingsLoaded += (newsettings) => { this.DataContext = newsettings; };
             
             groupFilterView = ((CollectionViewSource)this.Resources["GroupFilter"]);
             groupFilterView.Filter += GroupFilter;
-            webster.NavigateToString("<html><body><strong>THIS IS A TEST</strong></body></html>");
+        }
+
+        private void LoadSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new Microsoft.Win32.OpenFileDialog();
+            ofd.Filter = "DarwinCore Settings (*.dcsettings) | *.dcsettings";
+            if (ofd.ShowDialog() == true)
+            {
+                KMLFileSettings.Load(ofd.FileName);
+            }
+        }
+
+        private void SetAsDefault_Click(object sender, RoutedEventArgs e)
+        {
+            KMLFileSettings.Save(KMLFileSettings.DefaultSettings);
         }
 
         private void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            currentSettings.Save();
+            KMLFileSettings.Save();
+        }
+
+        private void SaveAsSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var sfd = new Microsoft.Win32.SaveFileDialog();
+            sfd.Filter = "DarwinCore Settings (*.dcsettings) | *.dcsettings";
+            if(sfd.ShowDialog() == true)
+            {
+                KMLFileSettings.Save(sfd.FileName);
+            }
+            
         }
         private void AddHeaderBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -106,6 +132,8 @@ namespace DarwinCoreUtility.Pages
         {
             lastFocused = sender as TextBox;
         }
+
+
     }
 
     public class WebBrowserDynamicUpdate

@@ -91,26 +91,37 @@ namespace DarwinCoreUtility.Darwin
             
         }
 
-
-        private static Placemark GeneratePlacemark(DarwinData d)
+        public string ResolveFields(string formatstring, int dataIdx = 0)
         {
-            string fieldDef = KMLFileSettings.CurrentSettings.PlacemarkNameFormat;
-            StringBuilder nameFormatted = new StringBuilder(fieldDef);
+            var selectedData = Data[dataIdx];
+            return ResolveFields(formatstring, selectedData);
+        }
+        public static string ResolveFields(string formatstring, DarwinData selectedData)
+        {
             int openBracket = -1;
             int closeBracket = 0;
-            while ((openBracket = fieldDef.IndexOf("[[", closeBracket)) != -1)
+            StringBuilder formatBuilder = new StringBuilder(formatstring);
+            while ((openBracket = formatstring.IndexOf("[[", closeBracket)) != -1)
             {
-                closeBracket = fieldDef.IndexOf("]]", openBracket);
-                string field = fieldDef.Substring(openBracket+2, closeBracket - openBracket-2);
-                string resolved = d[field];
-                //if (String.IsNullOrEmpty(resolved))
-                //{
-                //    resolved = "[Not Specified]";
-                //}
-                nameFormatted.Replace($"[[{field}]]", resolved);
+                closeBracket = formatstring.IndexOf("]]", openBracket);
+                string field = formatstring.Substring(openBracket + 2, closeBracket - openBracket - 2);
+                string resolved = selectedData[field];
+                if (resolved != null)
+                {
+                    formatBuilder.Replace($"[[{field}]]", resolved);
+                }
             }
+            return formatBuilder.ToString();
+        }
+
+
+        private static Placemark GeneratePlacemark(DarwinData d)
+        { 
             return new Placemark() {
-                Name = nameFormatted.ToString(), Point=new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude)
+                Name = ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkNameFormat, d),
+                Description = String.Format(KMLFileSettings.PlacemarkDescriptionWrapperFormat, 
+                                                ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkDescriptionFormat, d)),
+                Point = new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude)
             };
         }
 

@@ -42,7 +42,7 @@
         <Style TargetType="TextBlock" x:Key="Header">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontSize" Value="18"/>
             <Setter Property="Background" Value="Gray"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="2"/>
@@ -50,7 +50,14 @@
         <Style TargetType="TextBlock" x:Key="FieldLabel">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="LightSlateGray"/>
+            <!--<Setter Property="Background" Value="LightSlateGray"/>-->
+            <Setter Property="Padding" Value="2"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="MediumLabel">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <!--<Setter Property="Background" Value="LightSlateGray"/>-->
             <Setter Property="Padding" Value="2"/>
         </Style>
     </UserControl.Resources>
@@ -61,10 +68,15 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0" Height="25">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="90"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Save Settings" Click="SaveSettings_Click"/>
+            <Button Grid.Column="0" Content="Load Settings" Click="LoadSettings_Click"/>
+            <Button Grid.Column="1" Content="Save" Click="SaveSettings_Click"/>
+            <Button Grid.Column="2" Content="Save As" Click="SaveAsSettings_Click"/>
+            <Button Grid.Column="3" Content="Set As Default" Click="SetAsDefault_Click"/>
         </Grid>
         <ScrollViewer Grid.Row="1">
             <Grid>
@@ -88,14 +100,10 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="50"/>
-                            </Grid.ColumnDefinitions>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource ResourceKey=GroupFilter}}" Name="headerCombo"/>
-                            <Button Content="Add" Grid.Column="1" Click="AddHeaderBtn_Click"/>
-                        </Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox Width="200" ItemsSource="{Binding Source={StaticResource ResourceKey=GroupFilter}}" Name="headerCombo"/>
+                            <Button Width="50" Content="Add" Grid.Column="1" Click="AddHeaderBtn_Click"/>
+                        </StackPanel>
                         <ListView Grid.Row="1" ItemsSource="{Binding FolderGrouping}" IsManipulationEnabled="True">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -121,11 +129,6 @@
                         </ListView>
                     </Grid>
                     <TreeView Grid.Row="1" Grid.Column="1" Name="darwinFolders" ItemsSource="{Binding FolderStructure}">
-                        <!--<TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="True" />
-                    </Style>
-                </TreeView.ItemContainerStyle>-->
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Folders}">
                                 <TextBlock Text="{Binding Name}"/>
@@ -133,7 +136,7 @@
                         </TreeView.ItemTemplate>
                     </TreeView>
                 </Grid>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" Background="LightSlateGray">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="*"/>
@@ -142,44 +145,40 @@
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
-                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Button Width="50" Grid.Column="0" Content="Insert" Click="InsertName_Click"/>
+                            <ComboBox Width="200"  Grid.Column="1" ItemsSource="{Binding Data.Headers, ElementName=kmlSettings}" Name="placemarkNameCombo"/>
+                        </StackPanel>
+                        <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="100"/>
                                 <ColumnDefinition MaxWidth="300"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="225"/>
+                                <ColumnDefinition MaxWidth="300"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Name:" Style="{StaticResource FieldLabel}"/>
-                            <TextBox Text="{Binding PlacemarkNameFormat}"  Grid.Column="1" GotFocus="TextBox_GotFocus"/>                            
-                            <Button Width="60" Grid.Column="2" Content="Insert" Click="InsertName_Click"/>
-                            <ComboBox Grid.Column="3" ItemsSource="{Binding Data.Headers, ElementName=kmlSettings}" Name="placemarkNameCombo"/>
+                            <TextBlock Grid.Column="0" Text="Display Name:" Style="{StaticResource FieldLabel}"/>
+                            <TextBox Grid.Column="1" Text="{Binding PlacemarkNameFormat, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus"/>
+                            <TextBlock Grid.Column="2" Text="{Binding PlacemarkNameFormatPreview}" Style="{StaticResource FieldLabel}"/>
                         </Grid>
-                        <Grid Grid.Row="1" Height="50">
+                        <TextBlock Grid.Row="2" Text="Placecard Format" Style="{StaticResource MediumLabel}"/>
+                        <Grid Grid.Row="3">
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
+                                <RowDefinition Height="25"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Placecard Format" Style="{StaticResource FieldLabel}"/>
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Background="Black" Grid.Column="0" Text="HTML" Style="{StaticResource FieldLabel}"/>
-                                <TextBlock Background="Black" Grid.Column="1" Text="Preview" Style="{StaticResource FieldLabel}"/>
-
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="htmlEdit" Text ="{Binding PlacemarkDescriptionFormat}" Grid.Column="0" AcceptsReturn="True" GotFocus="TextBox_GotFocus"/>
-                            <WebBrowser local:WebBrowserDynamicUpdate.Html ="{Binding PlacemarkDescriptionFormat}"  Name="webster"  Grid.Column="1"/>
+                            <TextBlock Grid.Row="0" Background="Black" Grid.Column="0" Text="HTML" Style="{StaticResource FieldLabel}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Background="Black" Text="Preview" Style="{StaticResource FieldLabel}"/>
+
+                            <TextBox Grid.Row="1" x:Name="htmlEdit" Text ="{Binding PlacemarkDescriptionFormat, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" AcceptsReturn="True" GotFocus="TextBox_GotFocus"/>
+                            <WebBrowser Grid.Row="1" local:WebBrowserDynamicUpdate.Html ="{Binding PlacemarkDescriptionFormatPreview}"  Name="webster"  Grid.Column="1"/>
+                            
                         </Grid>
                     </Grid>
                     

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<KMLSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FolderGroupings>
+    <FolderGrouping>Genus</FolderGrouping>
+    <FolderGrouping>SpecificEpithet</FolderGrouping>
+  </FolderGroupings>
+  <PlacemarkNameFormat>[[Genus]] [[SpecificEpithet]] [[Subspecies]]</PlacemarkNameFormat>
+  <PlacemarkDescriptionFormat>&lt;table border=1 style="width:500px"&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Species&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Genus]] [[SpecificEpithet]] [[Subspecies]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Catalog Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[CatalogNumber]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Individual Count&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[IndividualCount]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Sex&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Sex]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Life Stage&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[LifeStage]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Record Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[RecordNumber]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collected By&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[RecordedBy]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Date Collected&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[EventDate]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Habitat&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Habitat]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Locality&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Locality]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;County&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[County]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;State/Province&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[StateProvince]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Country&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Country]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Elevation&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[MinimumElevationInMeters]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Uncertainty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[CoordinateUncertaintyInMeters]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Family&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Family]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Order&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Order]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Preparations&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Preparations]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Institution Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[InstitutionCode]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collection Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[CollectionCode]]&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</PlacemarkDescriptionFormat>
+</KMLSettings>
