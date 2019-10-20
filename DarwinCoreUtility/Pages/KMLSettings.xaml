@@ -13,6 +13,11 @@
                 <scm:SortDescription/>
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        <CollectionViewSource x:Key="ColorGroupFilter" Source="{Binding Data.Headers, ElementName=kmlSettings}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
         <CollectionViewSource x:Key="GroupList" Source="{Binding Data.Headers, ElementName=kmlSettings}">
             <CollectionViewSource.SortDescriptions>
                 <scm:SortDescription/>
@@ -88,112 +93,149 @@
             <Button Grid.Column="2" Content="Save As" Click="SaveAsSettings_Click"/>
             <Button Grid.Column="3" Content="Set As Default" Click="SetAsDefault_Click"/>
         </Grid>
+
         <ScrollViewer Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Height="300">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.ColumnSpan="3" Style="{StaticResource Header}" Text="Folder Grouping"/>
-                    <Grid Grid.Row="1">
+            <TabControl Grid.Row="0">
+                <TabItem Header="Folder Grouping">
+                    <Grid Grid.Row="0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
-                            <RowDefinition/>
+                            <RowDefinition MaxHeight="300"/>
+                            <RowDefinition MaxHeight="300"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox Width="200" ItemsSource="{Binding Source={StaticResource ResourceKey=GroupFilter}}" Name="headerCombo"/>
-                            <Button Width="50" Content="Add" Grid.Column="1" Click="AddHeaderBtn_Click"/>
-                        </StackPanel>
-                        <ListView Grid.Row="1" ItemsSource="{Binding FolderGrouping}" IsManipulationEnabled="True">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Button Grid.Column="0" Style="{StaticResource UpButton}" Click="MoveGroupingUp_Click"/>
-                                        <Button Grid.Column="1" Style="{StaticResource DownButton}" Click="MoveGroupingDown_Click"/>
-                                        <TextBlock Grid.Column="2" Style="{StaticResource XListViewTextItem}"  Text="{Binding }" />
-                                        <Button Grid.Column="3" Style="{StaticResource XButton}" Click="RemoveGrouping_Click"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                    <TreeView Grid.Row="1" Grid.Column="1" Name="darwinFolders" ItemsSource="{Binding FolderStructure}">
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Folders}">
-                                <TextBlock Text="{Binding Name}"/>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </Grid>
-                <Grid Grid.Row="1" Background="LightSlateGray">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.ColumnSpan="2" Style="{StaticResource Header}" Text="Placemark Settings"/>
-                    <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Button Width="50" Grid.Column="0" Content="Insert" Click="InsertName_Click"/>
-                            <ComboBox Width="200"  Grid.Column="1" ItemsSource="{Binding Source={StaticResource ResourceKey=GroupList}}" Name="placemarkNameCombo"/>
-                        </StackPanel>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.ColumnSpan="3" Style="{StaticResource Header}" Text="Folder Grouping"/>
                         <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition MaxWidth="300"/>
-                                <ColumnDefinition MaxWidth="300"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Display Name:" Style="{StaticResource FieldLabel}"/>
-                            <TextBox Grid.Column="1" Text="{Binding PlacemarkNameFormat, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus"/>
-                            <TextBlock Grid.Column="2" Text="{Binding PlacemarkNameFormatPreview}" Style="{StaticResource FieldLabel}"/>
-                        </Grid>
-                        <TextBlock Grid.Row="2" Text="Placecard Format" Style="{StaticResource MediumLabel}"/>
-                        <Grid Grid.Row="3">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0" Background="Black" Grid.Column="0" Text="HTML" Style="{StaticResource FieldLabel}"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Background="Black" Text="Preview" Style="{StaticResource FieldLabel}"/>
-
-                            <TextBox Grid.Row="1" x:Name="htmlEdit" Text ="{Binding PlacemarkDescriptionFormat, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" AcceptsReturn="True" GotFocus="TextBox_GotFocus"/>
-                            <WebBrowser Grid.Row="1" local:WebBrowserDynamicUpdate.Html ="{Binding PlacemarkDescriptionFormatPreview}"  Name="webster"  Grid.Column="1"/>
-                            
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Width="200" ItemsSource="{Binding Source={StaticResource ResourceKey=GroupFilter}}" Name="headerCombo"/>
+                                <Button Width="50" Content="Add" Grid.Column="1" Click="AddHeaderBtn_Click"/>
+                            </StackPanel>
+                            <ListView Grid.Row="1" ItemsSource="{Binding FolderGrouping}" IsManipulationEnabled="True">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="0" Style="{StaticResource UpButton}" Click="MoveGroupingUp_Click"/>
+                                            <Button Grid.Column="1" Style="{StaticResource DownButton}" Click="MoveGroupingDown_Click"/>
+                                            <TextBlock Grid.Column="2" Style="{StaticResource XListViewTextItem}"  Text="{Binding }" />
+                                            <Button Grid.Column="3" Style="{StaticResource XButton}" Click="RemoveGrouping_Click"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource FieldLabel}" Background="SlateGray" Text="Color Grouping"/>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <ComboBox Width="200" ItemsSource="{Binding Source={StaticResource ResourceKey=ColorGroupFilter}}" Name="headerColorCombo"/>
+                                <Button Width="50" Content="Add" Grid.Column="1" Click="AddHeaderColorBtn_Click"/>
+                            </StackPanel>
+                            <ListView Grid.Row="2" ItemsSource="{Binding ColorGrouping}" IsManipulationEnabled="True">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="0" Style="{StaticResource UpButton}" Click="MoveColorGroupingUp_Click"/>
+                                            <Button Grid.Column="1" Style="{StaticResource DownButton}" Click="MoveColorGroupingDown_Click"/>
+                                            <TextBlock Grid.Column="2" Style="{StaticResource XListViewTextItem}"  Text="{Binding }" />
+                                            <Button Grid.Column="3" Style="{StaticResource XButton}" Click="RemoveColorGrouping_Click"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                        <TreeView Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" Name="darwinFolders" ItemsSource="{Binding FolderStructure}" MaxHeight="600">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Folders}">
+                                    <TextBlock Text="{Binding Name}"/>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
                     </Grid>
-                    
-                </Grid>
-            </Grid>
+                </TabItem>
+                <TabItem Header="Placemark Settings">
+                    <Grid Background="LightSlateGray">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.ColumnSpan="2" Style="{StaticResource Header}" Text="Placemark Settings"/>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <Button Width="50" Grid.Column="0" Content="Insert" Click="InsertName_Click"/>
+                                <ComboBox Width="200"  Grid.Column="1" ItemsSource="{Binding Source={StaticResource ResourceKey=GroupList}}" Name="placemarkNameCombo"/>
+                            </StackPanel>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition MaxWidth="300"/>
+                                    <ColumnDefinition MaxWidth="300"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Display Name:" Style="{StaticResource FieldLabel}"/>
+                                <TextBox Grid.Column="1" Text="{Binding PlacemarkNameFormat, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus"/>
+                                <TextBlock Grid.Column="2" Text="{Binding PlacemarkNameFormatPreview}" Style="{StaticResource FieldLabel}"/>
+                            </Grid>
+                            <TextBlock Grid.Row="2" Text="Placecard Format" Style="{StaticResource MediumLabel}"/>
+                            <Grid Grid.Row="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Row="0" Background="Black" Grid.Column="0" Text="HTML" Style="{StaticResource FieldLabel}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Background="Black" Text="Preview" Style="{StaticResource FieldLabel}"/>
+
+                                <TextBox Grid.Row="1" x:Name="htmlEdit" Text ="{Binding PlacemarkDescriptionFormat, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" AcceptsReturn="True" GotFocus="TextBox_GotFocus"/>
+                                <WebBrowser Grid.Row="1" local:WebBrowserDynamicUpdate.Html ="{Binding PlacemarkDescriptionFormatPreview}"  Name="webster"  Grid.Column="1"/>
+
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </ScrollViewer>
     </Grid>
 

@@ -34,6 +34,12 @@ namespace DarwinCoreUtility.Pages
             e.Accepted = !currentSettings.FolderGrouping.Contains(e.Item as String);
         }
 
+        private CollectionViewSource colorGroupFilterView;
+        private void ColorGroupFilter(object filterObj, FilterEventArgs e)
+        {
+            e.Accepted = !currentSettings.ColorGrouping.Contains(e.Item as String);
+        }
+
         private KMLFileSettings currentSettings { get => KMLFileSettings.CurrentSettings; }
         public DarwinDataModel Data { get=>DarwinDataModel.CurrentData; }
 
@@ -47,6 +53,9 @@ namespace DarwinCoreUtility.Pages
             
             groupFilterView = ((CollectionViewSource)this.Resources["GroupFilter"]);
             groupFilterView.Filter += GroupFilter;
+
+            colorGroupFilterView = ((CollectionViewSource)this.Resources["ColorGroupFilter"]);
+            colorGroupFilterView.Filter += ColorGroupFilter;
         }
 
         private void LoadSettings_Click(object sender, RoutedEventArgs e)
@@ -83,7 +92,7 @@ namespace DarwinCoreUtility.Pages
         {
             if(headerCombo.SelectedItem != null)
             {
-                currentSettings.AddGrouping(headerCombo.SelectedItem as String);
+                currentSettings.AddFolderGrouping(headerCombo.SelectedItem as String);
                 groupFilterView.View.Refresh();
             }
         }
@@ -91,7 +100,7 @@ namespace DarwinCoreUtility.Pages
         private void RemoveGrouping_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
-            currentSettings.RemoveGrouping(btn.DataContext as String);
+            currentSettings.RemoveFolderGrouping(btn.DataContext as String);
             groupFilterView.View.Refresh();
         }
 
@@ -99,14 +108,14 @@ namespace DarwinCoreUtility.Pages
         {
             var btn = sender as Button;
             var item = btn.DataContext as String;
-            currentSettings.MoveGrouping(item, -1);
+            currentSettings.MoveFolderGrouping(item, -1);
         }
 
         private void MoveGroupingDown_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var item = btn.DataContext as String;
-            currentSettings.MoveGrouping(item, 1);
+            currentSettings.MoveFolderGrouping(item, 1);
         }
 
 
@@ -133,7 +142,35 @@ namespace DarwinCoreUtility.Pages
             lastFocused = sender as TextBox;
         }
 
+        private void AddHeaderColorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (headerColorCombo.SelectedItem != null)
+            {
+                currentSettings.AddColorGrouping(headerColorCombo.SelectedItem as String);
+                colorGroupFilterView.View.Refresh();
+            }
+        }
 
+        private void RemoveColorGrouping_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            currentSettings.RemoveColorGrouping(btn.DataContext as String);
+            colorGroupFilterView.View.Refresh();
+        }
+
+        private void MoveColorGroupingUp_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var item = btn.DataContext as String;
+            currentSettings.MoveColorGrouping(item, -1);
+        }
+
+        private void MoveColorGroupingDown_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var item = btn.DataContext as String;
+            currentSettings.MoveColorGrouping(item, 1);
+        }
     }
 
     public class WebBrowserDynamicUpdate

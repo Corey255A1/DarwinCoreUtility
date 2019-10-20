@@ -44,6 +44,9 @@ namespace DarwinCoreUtility.KML
         [XmlArray("FolderGroupings"), XmlArrayItem("FolderGrouping")]
         public ObservableCollection<string> FolderGrouping { get; set; } = new ObservableCollection<string>();
 
+        [XmlArray("ColorGroupings"), XmlArrayItem("ColorGrouping")]
+        public ObservableCollection<string> ColorGrouping { get; set; } = new ObservableCollection<string>();
+
         [XmlIgnore]
         public ObservableCollection<Folder> FolderStructure { get => DarwinDataModel.CurrentData.FolderStructure; }
 
@@ -124,24 +127,47 @@ namespace DarwinCoreUtility.KML
             XmlUtils.Save(CurrentSettings, LastSettingsFile);
         }
 
-
-        public void AddGrouping(string name)
+        public void AddColorGrouping(string name)
         {
-            currentSettings.FolderGrouping.Add(name);
-            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+            this.ColorGrouping.Add(name);
+            //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
-        public void RemoveGrouping(string name)
+        public void RemoveColorGrouping(string name)
         {
-            currentSettings.FolderGrouping.Remove(name);
-            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+            this.ColorGrouping.Remove(name);
+            //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
 
-        public bool MoveGrouping(string name, int direction)
+        public bool MoveColorGrouping(string name, int direction)
         {
-            int idx = currentSettings.FolderGrouping.IndexOf(name);
-            if (idx + direction >= 0 && idx + direction < currentSettings.FolderGrouping.Count)
+            int idx = this.ColorGrouping.IndexOf(name);
+            if (idx + direction >= 0 && idx + direction < this.ColorGrouping.Count)
             {
-                currentSettings.FolderGrouping.Move(idx, idx + direction);
+                this.ColorGrouping.Move(idx, idx + direction);
+                //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+                return true;
+            }
+            return false;
+        }
+
+
+        public void AddFolderGrouping(string name)
+        {
+            this.FolderGrouping.Add(name);
+            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+        }
+        public void RemoveFolderGrouping(string name)
+        {
+            this.FolderGrouping.Remove(name);
+            DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+        }
+
+        public bool MoveFolderGrouping(string name, int direction)
+        {
+            int idx = this.FolderGrouping.IndexOf(name);
+            if (idx + direction >= 0 && idx + direction < this.FolderGrouping.Count)
+            {
+                this.FolderGrouping.Move(idx, idx + direction);
                 DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
                 return true;
             }

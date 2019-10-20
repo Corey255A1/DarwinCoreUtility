@@ -75,16 +75,23 @@ namespace DarwinCoreUtility.Darwin
 
         public void ExportKML(string filename)
         {
+            Utils.ColorIterator.Reset();
             KMLFile outputFile = new KMLFile();
             var document = new Document();
-            document.Folders = new List<Folder>();
-            GenerateFolderStructure(KMLFileSettings.CurrentSettings.FolderGrouping.ToArray());
 
+            document.Styles = new List<Style>();
+            GenerateStyles(Data, KMLFileSettings.CurrentSettings.ColorGrouping.ToArray(), 0, "", document.Styles);
+
+            document.Folders = new List<Folder>();
+
+            GenerateFolderStructure(KMLFileSettings.CurrentSettings.FolderGrouping.ToArray());         
 
             foreach (Folder f in FolderStructure)
             {
                 document.Folders.Add(f);
             }
+
+
 
             outputFile.Document = document;
             KMLFile.Save(outputFile, filename);
@@ -114,6 +121,15 @@ namespace DarwinCoreUtility.Darwin
             return formatBuilder.ToString();
         }
 
+        public static string GetStyleURL(DarwinData d)
+        {
+            string url = "#";
+            foreach(var field in KMLFileSettings.CurrentSettings.ColorGrouping)
+            {
+                url += $"{d[field]}-";
+            }
+            return url.Trim('-');
+        }
 
         private static Placemark GeneratePlacemark(DarwinData d)
         { 
@@ -121,6 +137,7 @@ namespace DarwinCoreUtility.Darwin
                 Name = ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkNameFormat, d),
                 Description = String.Format(KMLFileSettings.PlacemarkDescriptionWrapperFormat, 
                                                 ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkDescriptionFormat, d)),
+                StyleURL = GetStyleURL(d),
                 Point = new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude)
             };
         }
@@ -160,6 +177,36 @@ namespace DarwinCoreUtility.Darwin
                 parentFolder.Folders.Add(f);
             }
             parentFolder.Folders.Sort((a, b) => { return String.Compare(a.Name, b.Name); });
+        }
+
+        
+
+        private static void GenerateStyles(IEnumerable<DarwinData> enumerations, string[] propertyNames, int propertyNameIndex, string name, List<Style> styleList)
+        {
+            if (propertyNames.Length <= 0 || enumerations.Count() == 0) return;
+
+            var grouping = enumerations.GroupBy(datum => datum[propertyNames[propertyNameIndex]]);
+            foreach (var g in grouping)
+            {
+                var styleName = g.Key==null ? "" : g.Key;
+                if (propertyNameIndex + 1 < propertyNames.Length)
+                {
+                    GenerateStyles(g, propertyNames, propertyNameIndex + 1, $"{styleName}-{name}", styleList);
+                }
+                else
+                {
+                    var s = new Style() {
+                        ID = name != "" ? $"{styleName}-{name}" : styleName,
+                        IconStyle = new IconStyle()
+                        {
+                            ColorMode = "normal",
+                            Href = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png",
+                            Color = Utils.ColorIterator.NextColor().HexABGR
+                        }
+                    };
+                    styleList.Add(s);
+                }
+            }
         }
 
 
