@@ -49,8 +49,8 @@ namespace DarwinCoreUtility
             if (ofd.ShowDialog() == true)
             {
                 DarwinDataModel.LoadFile(ofd.FileName);
-                controlWindow.Content = NavigationOptions[0];
-                navigationList.SelectedItem = NavigationOptions[0];
+                //controlWindow.Content = NavigationOptions[0];
+                //navigationList.SelectedItem = NavigationOptions[0];
             }
         }
 
