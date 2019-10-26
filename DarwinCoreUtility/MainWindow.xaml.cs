@@ -34,6 +34,8 @@ namespace DarwinCoreUtility
         public MainWindow()
         {
             InitializeComponent();
+            controlWindow.Content = NavigationOptions[0];
+            navigationList.SelectedItem = NavigationOptions[0];
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

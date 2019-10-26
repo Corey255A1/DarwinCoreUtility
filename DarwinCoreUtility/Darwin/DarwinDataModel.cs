@@ -54,6 +54,17 @@ namespace DarwinCoreUtility.Darwin
             get => DarwinData.PublicProperties;
         }
 
+        private DarwinData selectedData;
+
+        public DarwinData SelectedData
+        {
+            get => selectedData;
+            set
+            {
+                selectedData = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public DarwinDataModel(){}
         public DarwinDataModel(CSVFile file)
@@ -70,7 +81,12 @@ namespace DarwinCoreUtility.Darwin
             {
                 data.Add(new DarwinData(row));
             }
+            if (data.Count > 0)
+            {
+                SelectedData = data[0];
+            }
             NotifyPropertyChanged("Data");
+
         }
 
         public void ExportKML(string filename)
@@ -97,14 +113,19 @@ namespace DarwinCoreUtility.Darwin
             KMLFile.Save(outputFile, filename);
             
         }
-
-        public string ResolveFields(string formatstring, int dataIdx = 0)
+        public string ResolveFields(string formatstring)
+        {
+            return ResolveFields(formatstring, SelectedData);
+        }
+        public string ResolveFields(string formatstring, int dataIdx)
         {
             var selectedData = Data[dataIdx];
             return ResolveFields(formatstring, selectedData);
         }
         public static string ResolveFields(string formatstring, DarwinData selectedData)
         {
+            if (selectedData == null) return "";
+
             int openBracket = -1;
             int closeBracket = 0;
             StringBuilder formatBuilder = new StringBuilder(formatstring);
@@ -128,7 +149,9 @@ namespace DarwinCoreUtility.Darwin
             {
                 url += $"{d[field]}-";
             }
-            return url.Trim('-');
+            url = url.Trim('-');
+            if (url == "#") url = "#[Not_Specified]";
+            return url;
         }
 
         private static Placemark GeneratePlacemark(DarwinData d)
@@ -191,19 +214,20 @@ namespace DarwinCoreUtility.Darwin
                 var styleName = g.Key==null ? "" : g.Key;
                 if (propertyNameIndex + 1 < propertyNames.Length)
                 {
-                    GenerateStyles(g, propertyNames, propertyNameIndex + 1, $"{styleName}-{name}", styleList);
+                    GenerateStyles(g, propertyNames, propertyNameIndex + 1, String.IsNullOrEmpty(name)?styleName:$"{name}-{styleName}", styleList);
                 }
                 else
                 {
                     var s = new Style() {
-                        ID = name != "" ? $"{styleName}-{name}" : styleName,
+                        ID = (name != "" ? $"{name}-{styleName}" : styleName).Trim('-'),
                         IconStyle = new IconStyle()
                         {
                             ColorMode = "normal",
-                            Href = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png",
-                            Color = Utils.ColorIterator.NextColor().HexABGR
+                            Icon = new Icon() { Href = "http://maps.google.com/mapfiles/kml/paddle/wht-blank.png" },
+                            Color = Utils.ColorIterator.NextColor(129).HexABGR
                         }
                     };
+                    if (string.IsNullOrEmpty(s.ID)) s.ID = "[Not_Specified]";
                     styleList.Add(s);
                 }
             }

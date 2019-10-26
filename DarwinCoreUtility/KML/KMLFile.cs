@@ -67,6 +67,12 @@ namespace DarwinCoreUtility.KML
         [XmlElement("colorMode")]
         public string ColorMode { get; set; }
 
+        [XmlElement("Icon")]
+        public Icon Icon { get; set; }
+    }
+
+    public class Icon
+    {
         [XmlElement("href")]
         public string Href { get; set; }
     }

@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DataGrid Name="dataGrid" ItemsSource="{Binding Data}"/>
+        <DataGrid Name="dataGrid" ItemsSource="{Binding Data}" SelectedItem="{Binding SelectedData}"/>
     </Grid>
 </UserControl>

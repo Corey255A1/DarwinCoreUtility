@@ -67,7 +67,7 @@ namespace DarwinCoreUtility.KML
 
                 if (DarwinDataModel.CurrentData.Data.Count > 0)
                 {
-                    return DarwinDataModel.CurrentData.ResolveFields(placemarkNameFormat, 0);
+                    return DarwinDataModel.CurrentData.ResolveFields(placemarkNameFormat);
                 }
                 else
                 {
@@ -82,7 +82,11 @@ namespace DarwinCoreUtility.KML
         public string PlacemarkDescriptionFormat
         {
             get => placemarkDescriptionFormat;
-            set { placemarkDescriptionFormat = value; NotifyPropertyChanged(); NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview)); }
+            set {
+                placemarkDescriptionFormat = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
+            }
         }
 
         [XmlIgnore]
@@ -90,8 +94,9 @@ namespace DarwinCoreUtility.KML
         {
             get {
 
-                if (DarwinDataModel.CurrentData.Data.Count > 0) {
-                 return DarwinDataModel.CurrentData.ResolveFields(placemarkDescriptionFormat, 0);
+                if (DarwinDataModel.CurrentData.Data.Count > 0)
+                {
+                 return DarwinDataModel.CurrentData.ResolveFields(placemarkDescriptionFormat);
                 }
                 else
                 {
@@ -112,9 +117,6 @@ namespace DarwinCoreUtility.KML
                 LastSettingsFile = path;
             }
             CurrentSettings = XmlUtils.Load<KMLFileSettings>(LastSettingsFile);
-            //FolderGrouping.Clear();
-            //foreach (string grouping in loadedSettings.FolderGrouping) { FolderGrouping.Add(grouping); }
-            //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
 
         public static void Save(string path="")
@@ -130,12 +132,10 @@ namespace DarwinCoreUtility.KML
         public void AddColorGrouping(string name)
         {
             this.ColorGrouping.Add(name);
-            //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
         public void RemoveColorGrouping(string name)
         {
             this.ColorGrouping.Remove(name);
-            //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
         }
 
         public bool MoveColorGrouping(string name, int direction)
@@ -144,7 +144,6 @@ namespace DarwinCoreUtility.KML
             if (idx + direction >= 0 && idx + direction < this.ColorGrouping.Count)
             {
                 this.ColorGrouping.Move(idx, idx + direction);
-                //DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
                 return true;
             }
             return false;
@@ -176,12 +175,23 @@ namespace DarwinCoreUtility.KML
 
         private void CurrentData_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Data")
+            switch (e.PropertyName)
             {
-                DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
-                NotifyPropertyChanged(nameof(PlacemarkNameFormatPreview));
-                NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
-            }            
+                case "Data":
+                    {
+                        DarwinDataModel.CurrentData.GenerateFolderStructure(FolderGrouping.ToArray());
+                        NotifyPropertyChanged(nameof(PlacemarkNameFormatPreview));
+                        NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
+                    }
+                    break;
+
+                case "SelectedData":
+                    {
+                        NotifyPropertyChanged(nameof(PlacemarkNameFormatPreview));
+                        NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
+                    }
+                    break;
+            }
         }    
 
     }

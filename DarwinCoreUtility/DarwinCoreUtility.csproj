@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{11A06D38-F463-4C71-9020-D07FF71C68A7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WPFDarwinCoreToKML</RootNamespace>
-    <AssemblyName>WPFDarwinCoreToKML</AssemblyName>
+    <RootNamespace>DarwinCoreUtility</RootNamespace>
+    <AssemblyName>DarwinCoreKMLUtility</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

@@ -22,7 +22,7 @@ namespace DarwinCoreUtility.Pages
     /// </summary>
     public partial class DataGridPage : UserControl, INavigateable
     {
-        public string ButtonName => "Grid View";
+        public string ButtonName => "Data Grid View";
         public string ButtonTag => "gridview";
         public DarwinDataModel Data { get => DarwinDataModel.CurrentData; }
         public DataGridPage()
