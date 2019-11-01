@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,10 +25,13 @@ namespace DarwinCoreUtility.Pages
     {
         public string ButtonName => "Data Grid View";
         public string ButtonTag => "gridview";
+
         public DarwinDataModel Data { get => DarwinDataModel.CurrentData; }
+
         public DataGridPage()
         {
             this.DataContext = Data;
+            
             InitializeComponent();
         }
     }

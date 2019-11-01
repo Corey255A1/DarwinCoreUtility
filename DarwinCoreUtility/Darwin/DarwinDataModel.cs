@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using DarwinCoreUtility.CSV;
 using DarwinCoreUtility.KML;
+using System.Data;
 
 namespace DarwinCoreUtility.Darwin
 {
@@ -36,27 +37,46 @@ namespace DarwinCoreUtility.Darwin
         public void NotifyPropertyChanged([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
 
-        private ObservableCollection<DarwinData> data = new ObservableCollection<DarwinData>();
-        public ObservableCollection<DarwinData> Data
+        private CSVFile data;
+        public CSVFile Data
         {
             get => data;
             set
             {
                 data = value;
                 NotifyPropertyChanged();
+                NotifyPropertyChanged("DataLoaded");
             }
+        }
+
+        public bool DataLoaded
+        {
+            get => data != null; 
         }
 
         public ObservableCollection<Folder> FolderStructure { get; set; } = new ObservableCollection<Folder>();
 
         public IEnumerable<string> Headers
         {
-            get => DarwinData.PublicProperties;
+            get => Data.HeaderFields.Keys;
         }
 
-        private DarwinData selectedData;
+        private DataRowView selectedDataView;
 
-        public DarwinData SelectedData
+        public DataRowView SelectedDataView
+        {
+            get => selectedDataView;
+            set
+            {
+                selectedDataView = value;
+                SelectedData = value.Row;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private DataRow selectedData;
+
+        public DataRow SelectedData
         {
             get => selectedData;
             set
@@ -66,37 +86,34 @@ namespace DarwinCoreUtility.Darwin
             }
         }
 
+
         public DarwinDataModel(){}
         public DarwinDataModel(CSVFile file)
         {
-            foreach (var row in file)
-            {
-                data.Add(new DarwinData(row));
-            }
+            data = file;
         }
         public void Load(CSVFile file)
         {
-            data.Clear();
-            foreach (var row in file)
-            {
-                data.Add(new DarwinData(row));
-            }
+            data = file;
             if (data.Count > 0)
             {
-                SelectedData = data[0];
+                SelectedData = data.Table.Rows[0];
             }
             NotifyPropertyChanged("Data");
+            NotifyPropertyChanged("Headers");
+            NotifyPropertyChanged("DataLoaded");
 
         }
 
         public void ExportKML(string filename)
         {
+            if (Data == null) return;
             Utils.ColorIterator.Reset();
             KMLFile outputFile = new KMLFile();
             var document = new Document();
 
             document.Styles = new List<Style>();
-            GenerateStyles(Data, KMLFileSettings.CurrentSettings.ColorGrouping.ToArray(), 0, "", document.Styles);
+            GenerateStyles(Data.Data, KMLFileSettings.CurrentSettings.ColorGrouping.ToArray(), 0, "", document.Styles);
 
             document.Folders = new List<Folder>();
 
@@ -107,22 +124,20 @@ namespace DarwinCoreUtility.Darwin
                 document.Folders.Add(f);
             }
 
-
-
             outputFile.Document = document;
             KMLFile.Save(outputFile, filename);
             
         }
         public string ResolveFields(string formatstring)
         {
-            return ResolveFields(formatstring, SelectedData);
+            return ResolveFields(formatstring, Data.TableToCSVMap[SelectedData]);
         }
         public string ResolveFields(string formatstring, int dataIdx)
         {
             var selectedData = Data[dataIdx];
             return ResolveFields(formatstring, selectedData);
         }
-        public static string ResolveFields(string formatstring, DarwinData selectedData)
+        public static string ResolveFields(string formatstring, CSVRow selectedData)
         {
             if (selectedData == null) return "";
 
@@ -142,7 +157,7 @@ namespace DarwinCoreUtility.Darwin
             return formatBuilder.ToString();
         }
 
-        public static string GetStyleURL(DarwinData d)
+        public static string GetStyleURL(CSVRow d)
         {
             string url = "#";
             foreach(var field in KMLFileSettings.CurrentSettings.ColorGrouping)
@@ -154,14 +169,14 @@ namespace DarwinCoreUtility.Darwin
             return url;
         }
 
-        private static Placemark GeneratePlacemark(DarwinData d)
+        private static Placemark GeneratePlacemark(CSVRow d)
         { 
             return new Placemark() {
                 Name = ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkNameFormat, d),
                 Description = String.Format(KMLFileSettings.PlacemarkDescriptionWrapperFormat, 
                                                 ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkDescriptionFormat, d)),
                 StyleURL = GetStyleURL(d),
-                Point = new PlacemarkPoint(d.DecimalLatitude, d.DecimalLongitude)
+                Point = new PlacemarkPoint(d[KMLFileSettings.CurrentSettings.LatitudeField], d[KMLFileSettings.CurrentSettings.LongitudeField])
             };
         }
 
@@ -170,12 +185,12 @@ namespace DarwinCoreUtility.Darwin
             FolderStructure.Clear();
             var f = new Folder() { Name = "root" };
             f.Folders = new List<Folder>();
-            DarwinDataModel.GenerateFolderStructure(Data, propertyNames, 0, f);
+            DarwinDataModel.GenerateFolderStructure(Data.Data, propertyNames, 0, f);
             f.Folders.ForEach(add => FolderStructure.Add(add));
         }
 
 
-        private static void GenerateFolderStructure(IEnumerable<DarwinData> enumerations, string[] propertyNames, int propertyNameIndex, Folder parentFolder)
+        private static void GenerateFolderStructure(IEnumerable<CSVRow> enumerations, string[] propertyNames, int propertyNameIndex, Folder parentFolder)
         {
             if (propertyNames.Length <= 0 || enumerations.Count() == 0) return;
 
@@ -204,7 +219,7 @@ namespace DarwinCoreUtility.Darwin
 
         
 
-        private static void GenerateStyles(IEnumerable<DarwinData> enumerations, string[] propertyNames, int propertyNameIndex, string name, List<Style> styleList)
+        private static void GenerateStyles(IEnumerable<CSVRow> enumerations, string[] propertyNames, int propertyNameIndex, string name, List<Style> styleList)
         {
             if (propertyNames.Length <= 0 || enumerations.Count() == 0) return;
 

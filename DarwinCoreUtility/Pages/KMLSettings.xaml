@@ -23,6 +23,16 @@
                 <scm:SortDescription/>
             </CollectionViewSource.SortDescriptions>
         </CollectionViewSource>
+        <CollectionViewSource x:Key="LatList" Source="{Binding Data.Headers, ElementName=kmlSettings}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="LonList" Source="{Binding Data.Headers, ElementName=kmlSettings}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
         <Style TargetType="Button" x:Key="XButton">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Width" Value="20"/>
@@ -91,7 +101,7 @@
             <Button Grid.Column="0" Content="Load Settings" Click="LoadSettings_Click"/>
             <Button Grid.Column="1" Content="Save" Click="SaveSettings_Click"/>
             <Button Grid.Column="2" Content="Save As" Click="SaveAsSettings_Click"/>
-            <Button Grid.Column="3" Content="Set As Default" Click="SetAsDefault_Click"/>
+            <Button Grid.Column="3" Content="Set As Default" Click="SetAsDefault_Click" Visibility="Collapsed"/>
         </Grid>
 
         <ScrollViewer Grid.Row="1">
@@ -200,11 +210,27 @@
                                 <RowDefinition Height="25"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                            <Grid HorizontalAlignment="Left" Grid.Row="0" Width="600">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource FieldLabel}">Latitude Field:</TextBlock>
+                                    <ComboBox Width="200" SelectedItem="{Binding LatitudeField}" ItemsSource="{Binding Source={StaticResource ResourceKey=LatList}}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource FieldLabel}">Longitude Field:</TextBlock>
+                                    <ComboBox Width="200" SelectedItem="{Binding LongitudeField}" ItemsSource="{Binding Source={StaticResource ResourceKey=LonList}}"/>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <Button Width="50" Grid.Column="0" Content="Insert" Click="InsertName_Click"/>
                                 <ComboBox Width="200"  Grid.Column="1" ItemsSource="{Binding Source={StaticResource ResourceKey=GroupList}}" Name="placemarkNameCombo"/>
                             </StackPanel>
-                            <Grid Grid.Row="1">
+                            
+
+                            <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100"/>
                                     <ColumnDefinition MaxWidth="300"/>
@@ -214,8 +240,8 @@
                                 <TextBox Grid.Column="1" Text="{Binding PlacemarkNameFormat, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus"/>
                                 <TextBlock Grid.Column="2" Text="{Binding PlacemarkNameFormatPreview}" Style="{StaticResource FieldLabel}"/>
                             </Grid>
-                            <TextBlock Grid.Row="2" Text="Placecard Format" Style="{StaticResource MediumLabel}"/>
-                            <Grid Grid.Row="3">
+                            <TextBlock Grid.Row="3" Text="Placecard Format" Style="{StaticResource MediumLabel}"/>
+                            <Grid Grid.Row="4">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="25"/>
                                     <RowDefinition/>

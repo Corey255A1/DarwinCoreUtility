@@ -11,6 +11,7 @@ namespace DarwinCoreUtility.CSV
     {
         private readonly CSVFile parentFile;
         private string[] data;
+        public string[] Data { get => data; }
 
         public CSVRow(CSVFile parent)
         {
@@ -29,6 +30,15 @@ namespace DarwinCoreUtility.CSV
             set
             {
                 Set(key, value);
+            }
+        }
+
+
+        public IEnumerable<KeyValuePair<string, string>> GetAllColumns()
+        {
+            foreach(var header in parentFile.HeaderFields)
+            {
+                yield return new KeyValuePair<string, string>(header.Key, data[header.Value]);
             }
         }
 

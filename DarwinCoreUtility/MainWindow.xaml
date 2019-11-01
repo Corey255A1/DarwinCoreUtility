@@ -18,7 +18,7 @@
         </Grid.ColumnDefinitions>
         <Menu Grid.ColumnSpan="2">
             <MenuItem Header="Load" Click="OpenLoadDialog"/>
-            <MenuItem Header="Export KML" Click="ExportKML"/>
+            <MenuItem Header="Export KML" Click="ExportKML" IsEnabled="{Binding Data.DataLoaded}"/>
         </Menu>
         <ListView Grid.Row="1" Width="200" ItemsSource="{Binding NavigationOptions, ElementName=mainWindow}" SelectionChanged="ListView_SelectionChanged" Name="navigationList">
             <ListView.ItemTemplate>

@@ -1,30 +1,36 @@
 <?xml version="1.0"?>
 <KMLSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <FolderGroupings>
-    <FolderGrouping>Genus</FolderGrouping>
-    <FolderGrouping>SpecificEpithet</FolderGrouping>
+    <FolderGrouping>genus</FolderGrouping>
+    <FolderGrouping>specificEpithet</FolderGrouping>
   </FolderGroupings>
-  <PlacemarkNameFormat>[[Genus]] [[SpecificEpithet]] [[Subspecies]]</PlacemarkNameFormat>
+  <ColorGroupings>
+    <ColorGrouping>genus</ColorGrouping>
+    <ColorGrouping>specificEpithet</ColorGrouping>
+  </ColorGroupings>
+  <PlacemarkNameFormat>[[genus]] [[specificEpithet]] [[subspecies]]</PlacemarkNameFormat>
   <PlacemarkDescriptionFormat>&lt;table border=1 style="width:500px"&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Species&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Genus]] [[SpecificEpithet]] [[Subspecies]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Catalog Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[CatalogNumber]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Individual Count&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[IndividualCount]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Sex&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Sex]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Life Stage&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[LifeStage]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Record Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[RecordNumber]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collected By&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[RecordedBy]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Date Collected&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[EventDate]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Habitat&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Habitat]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Locality&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Locality]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;County&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[County]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;State/Province&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[StateProvince]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Country&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Country]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Elevation&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[MinimumElevationInMeters]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Uncertainty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[CoordinateUncertaintyInMeters]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Family&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Family]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Order&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Order]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Preparations&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[Preparations]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Institution Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[InstitutionCode]]&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collection Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[CollectionCode]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Species&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[genus]] [[specificEpithet]] [[subspecies]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Catalog Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[catalogNumber]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Individual Count&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[individualCount]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Sex&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[sex]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Life Stage&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[lifeStage]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Record Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[recordNumber]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collected By&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[recordedBy]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Date Collected&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[eventDate]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Habitat&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[habitat]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Locality&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[locality]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;County&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[county]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;State/Province&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[stateProvince]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Country&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[country]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Elevation&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[minimumElevationInMeters]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Uncertainty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[coordinateUncertaintyInMeters]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Family&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[family]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Order&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[order]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Preparations&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[preparations]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Institution Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[institutionCode]]&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td width="100"&gt;&lt;b&gt;Collection Code&lt;/b&gt;&lt;/td&gt;&lt;td&gt;[[collectionCode]]&lt;/td&gt;&lt;/tr&gt;
 &lt;/table&gt;</PlacemarkDescriptionFormat>
+  <LatitudeField>decimalLatitude</LatitudeField>
+  <LongitudeField>decimalLongitude</LongitudeField>
 </KMLSettings>

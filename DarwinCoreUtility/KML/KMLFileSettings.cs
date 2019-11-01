@@ -31,8 +31,8 @@ namespace DarwinCoreUtility.KML
             {
                 if (currentSettings == null)
                 {
-                    currentSettings = XmlUtils.Load<KMLFileSettings>(DefaultSettings);
-                    if (currentSettings == null)
+                    //currentSettings = XmlUtils.Load<KMLFileSettings>(DefaultSettings);
+                    //if (currentSettings == null)
                     {
                         currentSettings = new KMLFileSettings();
                     }
@@ -88,6 +88,9 @@ namespace DarwinCoreUtility.KML
                 NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
             }
         }
+
+        public string LatitudeField { get; set; }
+        public string LongitudeField { get; set; }
 
         [XmlIgnore]
         public string PlacemarkDescriptionFormatPreview

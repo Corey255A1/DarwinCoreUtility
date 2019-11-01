@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 using System.IO;
 using System.Collections;
+using System.Windows.Data;
+using System.Globalization;
 
 namespace DarwinCoreUtility.CSV
 {
+
     public class CSVFile: IEnumerable<CSVRow>
     {
         public readonly Dictionary<string, int> HeaderFields = new Dictionary<string, int>();
+        public readonly Dictionary<DataRow, CSVRow> TableToCSVMap = new Dictionary<DataRow, CSVRow>();
         public readonly List<CSVRow> Data = new List<CSVRow>();
+        public DataTable Table { get; set; } = new DataTable();
         public CSVRow NewRow() { return new CSVRow(this); }
 
         public CSVFile(string[] header)
@@ -19,7 +25,13 @@ namespace DarwinCoreUtility.CSV
             for(int i=0; i < header.Length; ++i)
             {
                 HeaderFields.Add(header[i], i);
+                Table.Columns.Add(header[i]);
             }
+        }
+
+        public DataView DefaultView
+        {
+            get => Table.DefaultView;
         }
 
         public static CSVFile Load(string filepath, char delim = '\t', bool firstlineheader = true)
@@ -47,6 +59,7 @@ namespace DarwinCoreUtility.CSV
                         csvfile.HeaderFields[i.ToString()] = i;
                         datarow.Set(i, row[i]);
                     }
+                    csvfile.TableToCSVMap.Add(csvfile.Table.Rows.Add(datarow.Data), datarow);
                     csvfile.Data.Add(datarow);
                 }
 
@@ -58,6 +71,7 @@ namespace DarwinCoreUtility.CSV
                     {
                         datarow.Set(i, row[i]);
                     }
+                    csvfile.TableToCSVMap.Add(csvfile.Table.Rows.Add(datarow.Data), datarow);
                     csvfile.Data.Add(datarow);
                 }
                 return csvfile;
@@ -68,6 +82,11 @@ namespace DarwinCoreUtility.CSV
                 Console.WriteLine(e.ToString());
                 return null;
             }
+        }
+
+        public int Count
+        {
+            get => Table.Rows.Count;
         }
 
         public dynamic this[int index]

@@ -31,9 +31,13 @@ namespace DarwinCoreUtility
            new DataGridPage(),
            new KMLSettings()
         };
+
+        public DarwinDataModel Data { get => DarwinDataModel.CurrentData; }
+
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = this;
             controlWindow.Content = NavigationOptions[0];
             navigationList.SelectedItem = NavigationOptions[0];
         }
