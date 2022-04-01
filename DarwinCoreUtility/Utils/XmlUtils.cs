@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace DarwinCoreUtility.Utils
 {
     public static class XmlUtils
     {
-        public static void Save<T>(T file, string path, XmlSerializerNamespaces xsn=null)
+        public static void Save<T>(T file, string path, XmlSerializerNamespaces xsn = null)
         {
             try
             {

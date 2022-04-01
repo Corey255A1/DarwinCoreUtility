@@ -1,18 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.IO;
-using System.Collections;
-using System.Windows.Data;
-using System.Globalization;
 
 namespace DarwinCoreUtility.CSV
 {
 
-    public class CSVFile: IEnumerable<CSVRow>
+    public class CSVFile : IEnumerable<CSVRow>
     {
         public readonly Dictionary<string, int> HeaderFields = new Dictionary<string, int>();
         public readonly Dictionary<DataRow, CSVRow> TableToCSVMap = new Dictionary<DataRow, CSVRow>();
@@ -22,7 +17,7 @@ namespace DarwinCoreUtility.CSV
 
         public CSVFile(string[] header)
         {
-            for(int i=0; i < header.Length; ++i)
+            for (int i = 0; i < header.Length; ++i)
             {
                 HeaderFields.Add(header[i], i);
                 Table.Columns.Add(header[i]);
@@ -40,7 +35,7 @@ namespace DarwinCoreUtility.CSV
             {
                 CSVFile csvfile;
                 string[] lines = File.ReadAllLines(filepath);
-                if(lines.Length == 0)
+                if (lines.Length == 0)
                 {
                     return null;
                 }
@@ -54,7 +49,7 @@ namespace DarwinCoreUtility.CSV
                 {
                     csvfile = new CSVFile(row);
                     var datarow = csvfile.NewRow();
-                    for(int i = 0; i < row.Length; i++)
+                    for (int i = 0; i < row.Length; i++)
                     {
                         csvfile.HeaderFields[i.ToString()] = i;
                         datarow.Set(i, row[i]);
@@ -63,7 +58,7 @@ namespace DarwinCoreUtility.CSV
                     csvfile.Data.Add(datarow);
                 }
 
-                for(int lineIdx=1;lineIdx < lines.Length; ++lineIdx)
+                for (int lineIdx = 1; lineIdx < lines.Length; ++lineIdx)
                 {
                     row = lines[lineIdx].Split(new char[] { delim });
                     var datarow = csvfile.NewRow();

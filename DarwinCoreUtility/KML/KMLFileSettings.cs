@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DarwinCoreUtility.Darwin;
+using DarwinCoreUtility.Utils;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using DarwinCoreUtility.Darwin;
-using DarwinCoreUtility.Utils;
 namespace DarwinCoreUtility.KML
 {
     [XmlRoot("KMLSettings")]
@@ -51,7 +48,7 @@ namespace DarwinCoreUtility.KML
         public ObservableCollection<Folder> FolderStructure { get => DarwinDataModel.CurrentData.FolderStructure; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        private void NotifyPropertyChanged([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         private string placemarkNameFormat = "";
         public string PlacemarkNameFormat
@@ -63,9 +60,10 @@ namespace DarwinCoreUtility.KML
         [XmlIgnore]
         public string PlacemarkNameFormatPreview
         {
-            get {
+            get
+            {
 
-                if (DarwinDataModel.CurrentData.Data.Count > 0)
+                if (DarwinDataModel.CurrentData.Data?.Count > 0)
                 {
                     return DarwinDataModel.CurrentData.ResolveFields(placemarkNameFormat);
                 }
@@ -82,7 +80,8 @@ namespace DarwinCoreUtility.KML
         public string PlacemarkDescriptionFormat
         {
             get => placemarkDescriptionFormat;
-            set {
+            set
+            {
                 placemarkDescriptionFormat = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(PlacemarkDescriptionFormatPreview));
@@ -95,11 +94,12 @@ namespace DarwinCoreUtility.KML
         [XmlIgnore]
         public string PlacemarkDescriptionFormatPreview
         {
-            get {
+            get
+            {
 
-                if (DarwinDataModel.CurrentData.Data.Count > 0)
+                if (DarwinDataModel.CurrentData.Data?.Count > 0)
                 {
-                 return DarwinDataModel.CurrentData.ResolveFields(placemarkDescriptionFormat);
+                    return DarwinDataModel.CurrentData.ResolveFields(placemarkDescriptionFormat);
                 }
                 else
                 {
@@ -122,13 +122,13 @@ namespace DarwinCoreUtility.KML
             CurrentSettings = XmlUtils.Load<KMLFileSettings>(LastSettingsFile);
         }
 
-        public static void Save(string path="")
+        public static void Save(string path = "")
         {
             if (!String.IsNullOrEmpty(path))
             {
-                LastSettingsFile = path;                
+                LastSettingsFile = path;
             }
- 
+
             XmlUtils.Save(CurrentSettings, LastSettingsFile);
         }
 
@@ -195,7 +195,7 @@ namespace DarwinCoreUtility.KML
                     }
                     break;
             }
-        }    
+        }
 
     }
 }

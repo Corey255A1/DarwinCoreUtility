@@ -1,12 +1,10 @@
-﻿using System;
+﻿using DarwinCoreUtility.CSV;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
-using DarwinCoreUtility.CSV;
+using System.Runtime.CompilerServices;
 
 namespace DarwinCoreUtility.Darwin
 {
@@ -57,7 +55,7 @@ namespace DarwinCoreUtility.Darwin
                 if (propertyMap == null)
                 {
                     propertyMap = new Dictionary<string, PropertyInfo>();
-                    foreach (var prop in typeof(DarwinData).GetProperties().Where(p=>Attribute.IsDefined(p,typeof(DarwinField))))
+                    foreach (var prop in typeof(DarwinData).GetProperties().Where(p => Attribute.IsDefined(p, typeof(DarwinField))))
                     {
                         propertyMap.Add(prop.Name, prop);
                     }
@@ -65,9 +63,10 @@ namespace DarwinCoreUtility.Darwin
                 return propertyMap;
             }
         }
-        
 
-        public string this[string key]{
+
+        public string this[string key]
+        {
             get => PropertyMap.ContainsKey(key) ? (string)PropertyMap[key].GetValue(this) : null;
         }
 

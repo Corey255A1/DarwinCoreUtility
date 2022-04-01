@@ -1,14 +1,10 @@
-﻿using System;
+﻿using DarwinCoreUtility.Utils;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using DarwinCoreUtility.Utils;
 namespace DarwinCoreUtility.KML
 {
-    [XmlRoot("kml", Namespace="http://www.opengis.net/kml/2.2")]
+    [XmlRoot("kml", Namespace = "http://www.opengis.net/kml/2.2")]
     public class KMLFile
     {
         [XmlElement("Document")]

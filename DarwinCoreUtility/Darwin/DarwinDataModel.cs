@@ -1,17 +1,17 @@
-﻿using System;
+﻿using DarwinCoreUtility.CSV;
+using DarwinCoreUtility.KML;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using DarwinCoreUtility.CSV;
-using DarwinCoreUtility.KML;
-using System.Data;
 
 namespace DarwinCoreUtility.Darwin
 {
-    public class DarwinDataModel: INotifyPropertyChanged
+    public class DarwinDataModel : INotifyPropertyChanged
     {
 
         #region Static Singleton
@@ -51,14 +51,14 @@ namespace DarwinCoreUtility.Darwin
 
         public bool DataLoaded
         {
-            get => data != null; 
+            get => data != null;
         }
 
         public ObservableCollection<Folder> FolderStructure { get; set; } = new ObservableCollection<Folder>();
 
         public IEnumerable<string> Headers
         {
-            get => Data.HeaderFields.Keys;
+            get => Data?.HeaderFields.Keys;
         }
 
         private DataRowView selectedDataView;
@@ -87,7 +87,7 @@ namespace DarwinCoreUtility.Darwin
         }
 
 
-        public DarwinDataModel(){}
+        public DarwinDataModel() { }
         public DarwinDataModel(CSVFile file)
         {
             data = file;
@@ -117,7 +117,7 @@ namespace DarwinCoreUtility.Darwin
 
             document.Folders = new List<Folder>();
 
-            GenerateFolderStructure(KMLFileSettings.CurrentSettings.FolderGrouping.ToArray());         
+            GenerateFolderStructure(KMLFileSettings.CurrentSettings.FolderGrouping.ToArray());
 
             foreach (Folder f in FolderStructure)
             {
@@ -126,7 +126,7 @@ namespace DarwinCoreUtility.Darwin
 
             outputFile.Document = document;
             KMLFile.Save(outputFile, filename);
-            
+
         }
         public string ResolveFields(string formatstring)
         {
@@ -160,7 +160,7 @@ namespace DarwinCoreUtility.Darwin
         public static string GetStyleURL(CSVRow d)
         {
             string url = "#";
-            foreach(var field in KMLFileSettings.CurrentSettings.ColorGrouping)
+            foreach (var field in KMLFileSettings.CurrentSettings.ColorGrouping)
             {
                 url += $"{d[field]}-";
             }
@@ -170,10 +170,11 @@ namespace DarwinCoreUtility.Darwin
         }
 
         private static Placemark GeneratePlacemark(CSVRow d)
-        { 
-            return new Placemark() {
+        {
+            return new Placemark()
+            {
                 Name = ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkNameFormat, d),
-                Description = String.Format(KMLFileSettings.PlacemarkDescriptionWrapperFormat, 
+                Description = String.Format(KMLFileSettings.PlacemarkDescriptionWrapperFormat,
                                                 ResolveFields(KMLFileSettings.CurrentSettings.PlacemarkDescriptionFormat, d)),
                 StyleURL = GetStyleURL(d),
                 Point = new PlacemarkPoint(d[KMLFileSettings.CurrentSettings.LatitudeField], d[KMLFileSettings.CurrentSettings.LongitudeField])
@@ -217,7 +218,7 @@ namespace DarwinCoreUtility.Darwin
             parentFolder.Folders.Sort((a, b) => { return String.Compare(a.Name, b.Name); });
         }
 
-        
+
 
         private static void GenerateStyles(IEnumerable<CSVRow> enumerations, string[] propertyNames, int propertyNameIndex, string name, List<Style> styleList)
         {
@@ -226,14 +227,15 @@ namespace DarwinCoreUtility.Darwin
             var grouping = enumerations.GroupBy(datum => datum[propertyNames[propertyNameIndex]]);
             foreach (var g in grouping)
             {
-                var styleName = g.Key==null ? "" : g.Key;
+                var styleName = g.Key == null ? "" : g.Key;
                 if (propertyNameIndex + 1 < propertyNames.Length)
                 {
-                    GenerateStyles(g, propertyNames, propertyNameIndex + 1, String.IsNullOrEmpty(name)?styleName:$"{name}-{styleName}", styleList);
+                    GenerateStyles(g, propertyNames, propertyNameIndex + 1, String.IsNullOrEmpty(name) ? styleName : $"{name}-{styleName}", styleList);
                 }
                 else
                 {
-                    var s = new Style() {
+                    var s = new Style()
+                    {
                         ID = (name != "" ? $"{name}-{styleName}" : styleName).Trim('-'),
                         IconStyle = new IconStyle()
                         {

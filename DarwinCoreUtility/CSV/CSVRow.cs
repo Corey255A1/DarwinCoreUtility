@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DarwinCoreUtility.CSV
 {
@@ -36,7 +31,7 @@ namespace DarwinCoreUtility.CSV
 
         public IEnumerable<KeyValuePair<string, string>> GetAllColumns()
         {
-            foreach(var header in parentFile.HeaderFields)
+            foreach (var header in parentFile.HeaderFields)
             {
                 yield return new KeyValuePair<string, string>(header.Key, data[header.Value]);
             }
